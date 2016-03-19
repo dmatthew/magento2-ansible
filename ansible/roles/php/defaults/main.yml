@@ -1,0 +1,8 @@
+---
+php:
+    version: 5.5
+    fpm_install: true
+    fpm_user: vagrant
+    fpm_group: vagrant
+    timezone: UTC
+...

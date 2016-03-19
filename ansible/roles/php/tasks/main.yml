@@ -1,0 +1,15 @@
+---
+- include_vars: "php-{{ php.version }}.yml"
+
+- name: Install php ppa repository
+  become: yes
+  apt_repository: repo={{ php_repo }}
+
+- name: Install PHP Packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items: php_packages
+
+- include: php-fpm.yml
+  when: php.fpm_install == true
+...

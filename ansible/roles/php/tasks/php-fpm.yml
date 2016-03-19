@@ -1,0 +1,41 @@
+---
+- name: Install php-fpm packages
+  become: yes
+  apt: pkg={{ item }}
+  with_items: php_fpm_packages
+
+- name: Delete old PHP-FPM config file
+  become: yes
+  file: path={{ php_fpm_pool_file }} state=absent
+
+- name: Set up new PHP-FPM config file
+  become: yes
+  template: src=www.conf.tpl dest={{ php_fpm_pool_file }}
+
+- name: ensure timezone is set in fpm php.ini
+  become: yes
+  lineinfile:
+    dest: "{{ php_fpm_ini_file }}"
+    regexp: "date.timezone ="
+    line: "date.timezone = {{ php.timezone }}"
+
+- name: Set php memory_limit
+  become: yes
+  lineinfile:
+    dest: "{{ php_fpm_ini_file }}"
+    regexp: "memory_limit ="
+    line: "memory_limit = {{ php_fpm_memory_limit }}"
+
+- name: Enabling opcache
+  become: yes
+  lineinfile:
+    dest: "{{ php_fpm_ini_file }}"
+    regexp: ';?opcache.enable=\d'
+    line: "opcache.enable=1"
+
+- name: Enable php-fpm
+  become: yes
+  service:
+    name: "{{ php_fpm_service }}"
+    state: started
+    enabled: yes

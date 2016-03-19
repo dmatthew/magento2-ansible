@@ -1,0 +1,21 @@
+---
+- name: Install Nginx
+  become: yes
+  apt: pkg=nginx state=latest
+
+- name: Set up new default nginx site
+  become: yes
+  template: src={{ nginx.servername }}.tpl dest=/etc/nginx/sites-available/{{ nginx.servername }}
+  notify: restart nginx
+
+- name: Set up sites-enabled symlink for new site
+  become: yes
+  file: src=/etc/nginx/sites-available/{{ nginx.servername }} path=/etc/nginx/sites-enabled/{{ nginx.servername }} state=link
+
+- name: Delete old default nginx site
+  become: yes
+  file: path=/etc/nginx/sites-available/default state=absent
+
+- name: Delete old default nginx sites-enabled symlink
+  become: yes
+  file: path=/etc/nginx/sites-enabled/default state=absent

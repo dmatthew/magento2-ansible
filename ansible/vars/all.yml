@@ -1,0 +1,15 @@
+---
+php:
+    version: 5.6
+    fpm_install: true
+    fpm_user: www-data
+    fpm_group: www-data
+    timezone: UTC
+
+nginx:
+    docroot: '/vagrant'
+    unix_socket_path: '/var/run/php5-fpm.sock'
+    servername: 'magento2ce.dev'
+
+mysql:
+    root_password: 'password'

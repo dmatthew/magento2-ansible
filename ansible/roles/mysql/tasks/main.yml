@@ -1,0 +1,19 @@
+---
+- name: Install MySQL
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items: mysql_packages
+
+- name:  Update MySQL root password for all root accounts
+  mysql_user: name=root host={{ item }} check_implicit_admin=yes password={{ mysql.root_password }} login_user=root login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Delete anonymous MySQL users
+  mysql_user: name='' host={{ item }} state=absent login_user=root login_password={{ mysql.root_password }}
+  with_items:
+    - localhost
+    - "{{ ansible_hostname }}"

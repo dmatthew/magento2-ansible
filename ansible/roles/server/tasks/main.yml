@@ -1,0 +1,25 @@
+---
+- name: Update apt-cache
+  become: yes
+  apt: update_cache=yes
+
+- name: Install System Packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - curl
+    - python-software-properties
+
+- name: Install Extra Packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ server.packages | default([]) }}"
+
+- name: Configure the timezone
+  become: yes
+  template: src=timezone.tpl dest=/etc/timezone
+
+- name: Set default system language pack
+  become: yes
+  shell: locale-gen {{server.locale}}
+...

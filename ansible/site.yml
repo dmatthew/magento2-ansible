@@ -1,0 +1,11 @@
+---
+- hosts: all
+  vars_files:
+    - vars/all.yml
+  roles:
+    - server
+    - php
+    - composer
+    - nginx
+    - mysql
+...
