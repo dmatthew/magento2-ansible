@@ -17,7 +17,7 @@ php_config_dir: /etc/php5
 php_fpm_packages:
   - php5-fpm
 
-php_fpm_service: php5-llfpm
+php_fpm_service: php5-fpm
 php_fpm_pool_file: "{{ php_config_dir }}/fpm/pool.d/www.conf"
 php_fpm_ini_file: /etc/php5/fpm/php.ini
 php_fpm_memory_limit: 768M
